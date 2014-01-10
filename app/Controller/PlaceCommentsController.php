@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+
 /**
  * PlaceComments Controller
  *
@@ -36,8 +37,26 @@ class PlaceCommentsController extends AppController {
             $comment=  $this->PlaceComment->find('all',array(
                 'recursive'=>-1
             ));
-            
             $this->_renderJson($comment);
+        }
+        
+        public function getCommentByIdPlace(){
+            if($this->request->is('get'))
+                return $this->_renderJson($this->PlaceComment->getComments($this->request->query));
+
+        }
+        
+        public function saveComment(){
+            $this->layout=NULL;
+            $this->autoRender=FALSE;
+            if($this->request->is('get'))
+                $arr_get=  $this->request->query;
+                if(isset ($arr_get['place_id'])&&isset($arr_get['user_id'])&&isset($arr_get['message'])){
+                    if($this->PlaceComment->save($this->request->query)){
+                        return 1;
+                    }
+                }
+            return 0;
         }
 /**
  * index method

@@ -21,6 +21,7 @@ class UsersController extends AppController {
 //            $this->response->type('json');
 //            $this->response->body(json_encode($Users));
 //        }
+        
         private function _renderJson($arr){
             $this->layout=NULL;
             $this->autoRender=FALSE;
@@ -28,6 +29,12 @@ class UsersController extends AppController {
             $this->response->body(json_encode($arr));
          }
          
+        public function getEmailByIdUser(){
+            $this->layout=NULL;
+            $this->autoRender=FALSE;
+            return $this->User->getEmail($this->request->query);
+        }
+
         public function login(){
             $Users=0;
             if($this->request->is('post')){

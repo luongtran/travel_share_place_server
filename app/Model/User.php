@@ -58,7 +58,12 @@ class User extends AppModel {
             'friend'=>array(
                 'className'=>'Friend',
                 'foreignKey'=>'user_id'
+            ),
+            'PlaceComment'=>array(
+                'className'=>'PlaceComment',
+                'foreignKey'=>'user_id'
             )
+            
             
         );
         
@@ -114,5 +119,18 @@ class User extends AppModel {
                 }
             }
             return 3;
+        }
+        public function getEmail($arr_request){
+            if(isset($arr_request['user_id'])){
+                $arr_user=  $this->find('all',array(
+                    'conditions'=>array('id'=>$arr_request['user_id']),
+                    'recursive'=>-1
+                ));
+                if($arr_user!=null)
+                    return $arr_user[0]['User']['email'];
+                else
+                    return 0;
+            }
+            return 0;
         }
 }

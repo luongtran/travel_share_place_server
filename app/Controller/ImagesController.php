@@ -15,7 +15,7 @@ class ImagesController extends AppController {
  * @var array
  */
 	public $helpers = array('Html');
-
+        
 /**
  * Components
  *
@@ -28,11 +28,31 @@ class ImagesController extends AppController {
  *
  * @return void
  */
+        
+        
+        private function _renderJson($arr){
+            $this->layout=NULL;
+            $this->autoRender=FALSE;
+            $this->response->type('json');
+            $this->response->body(json_encode($arr));
+            
+        }
+        /*
+         *input is request get with id_place
+         * output is array json with info image of id_place
+         *           */
+        
+        public function getImagesByIDPlace(){
+            
+            return $this->_renderJson($this->Image->getImages($this->request->query));
+              
+        }
+        
 	public function index() {
 		$this->Image->recursive = 0;
 		$this->set('images', $this->Paginator->paginate());
 	}
-       
+        
         private function _uploadImageForProperty($image) {
             $folder = new Folder();
             $path =WWW_ROOT . 'img/properties' . DS .'uploads';
@@ -43,15 +63,20 @@ class ImagesController extends AppController {
         public function upload() {
             $this->layout=NULL;
             $this->autoRender=FALSE;
-            pr($this->request->data);    
-            if($this->_uploadImageForProperty($this->request->data['Images']['my-file'])) {
+            //$file_path = "img/properties/uploads/";
+            
+            $folder = new Folder();
+            $file_path =WWW_ROOT . 'img/properties' . DS .'test_uploads';
+            $folder->create($file_path);
+            //echo $file_path;
+            $file_path=$file_path.'/';
+            $file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
+            if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
                 echo "success";
-            }else {
-                echo 'fail';
+            } else{
+                echo "fail";
             }
         }
-        
-         
 /**
  * view method
  *
