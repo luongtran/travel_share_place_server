@@ -14,18 +14,11 @@ class PlaceFavorite extends AppModel {
 	public $useTable = 'place_favorite';
 
 /**
- * Primary key field
- *
- * @var string
- */
-	public $primaryKey = 'user_id';
-
-/**
  * Display field
  *
  * @var string
  */
-	public $displayField = 'user_id';
+	public $displayField = 'id';
 
 /**
  * Validation rules
@@ -33,19 +26,9 @@ class PlaceFavorite extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'user_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'place_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
+		'id' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -54,14 +37,73 @@ class PlaceFavorite extends AppModel {
 			),
 		),
 	);
-        public $belongsTo=array(
-            'Place'=>array(
-                'className'=>'Place',
-                'foreignKey'=>'place_id'
-            ),
-            'User'=>array(
-                'className'=>'User',
-                'foreignKey'=>'user_id'
-            )
-        );
+        /*
+            input: request get including user_id and place id
+         * output: return 0-> not request get
+         *         return 1-> store favorite
+         *         return 2 -> delete favorite
+         *          */
+        public function getFavorite($request){
+            if(isset($request['user_id'])&& isset($request['place_id'])){
+                if($request['user_id']!=NULL&&$request['place_id']!=NULL){
+                    $user_id=$request['user_id'];
+                    $place_id=$request['place_id'];
+                    $check_exists=  $this->find('all',array(
+                        'conditions'=>array('user_id'=>$user_id,'place_id'=>$place_id)
+                    ));
+                    if($check_exists!=NULL){
+                        //delete
+                        $this->id=$check_exists[0]['PlaceFavorite']['id'];
+                        $this->delete();
+                        return 2;
+                    }else
+                    {
+                        if($this->save($request))
+                            return 1;
+                    }
+                }
+                
+            }
+            return 0;
+        }
+        //get places favorite of user
+        /*
+
+         * input : request get from client
+         * output: return places favorite
+         *          return 1 ->user is not favorite  
+         *          return 2 ->not get from client       */
+        public function getPlacesFavorite($request){
+            $id_places=array();
+            if(isset($request['user_id'])){
+                if($request['user_id']!=NULL){
+                    $user_id=$request['user_id'];
+                    $favorites=  $this->find('all',array(
+                         'conditions'=>array('user_id'=>$user_id)
+                    ));
+                    if($favorites!=NULL){
+                        for($i=0;$i<count($favorites);$i++){
+                            array_push($id_places,$favorites[$i]['PlaceFavorite']['place_id']);
+                        }
+                        return $this->_getPlaces($id_places);
+                    }else
+                        return 1;
+                }
+            }
+            return 0;
+        }
+        //get places from arr id_place
+        private function _getPlaces($id_places){
+            $model_places= classRegistry::init('Place');
+            $places_return=array();
+            for($i=0;$i<count($id_places);$i++){
+                $places=$model_places->find('all',array(
+                    'recursive'=>-1,
+                    'conditions'=>array('id'=>$id_places[$i])
+                ));
+                array_push($places_return,$places[0]['Place']);
+            }
+            return $places_return;
+        }
+                
 }

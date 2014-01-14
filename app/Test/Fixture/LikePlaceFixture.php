@@ -1,16 +1,16 @@
 <?php
 /**
- * PlaceFavoriteFixture
+ * LikePlaceFixture
  *
  */
-class PlaceFavoriteFixture extends CakeTestFixture {
+class LikePlaceFixture extends CakeTestFixture {
 
 /**
  * Table name
  *
  * @var string
  */
-	public $table = 'place_favorite';
+	public $table = 'like_place';
 
 /**
  * Fields
@@ -21,7 +21,7 @@ class PlaceFavoriteFixture extends CakeTestFixture {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'user_id' => array('type' => 'integer', 'null' => true, 'default' => null),
 		'place_id' => array('type' => 'integer', 'null' => true, 'default' => null),
-		'favorite_time' => array('type' => 'timestamp', 'null' => false, 'default' => 'CURRENT_TIMESTAMP'),
+		'like_time' => array('type' => 'timestamp', 'null' => false, 'default' => 'CURRENT_TIMESTAMP'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -38,7 +38,7 @@ class PlaceFavoriteFixture extends CakeTestFixture {
 			'id' => 1,
 			'user_id' => 1,
 			'place_id' => 1,
-			'favorite_time' => 1389595510
+			'like_time' => 1389601165
 		),
 	);
 

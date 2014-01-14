@@ -21,7 +21,19 @@ class FriendsController extends AppController {
             $this->response->type('json');
             $this->response->body(json_encode($Friends));
         }
-/**
+        private function _renderJson($arr){
+            $this->layout=NULL;
+            $this->autoRender=FALSE;
+            $this->response->type('json');
+            $this->response->body(json_encode($arr));
+        }
+
+        public function getFriends(){
+            $this->_renderJson($this->Friend->getListFriend($this->request->query));
+            
+        }
+
+        /**
  * Components
  *
  * @var array

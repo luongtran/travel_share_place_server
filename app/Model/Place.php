@@ -72,7 +72,8 @@ class Place extends AppModel {
                     'conditions'=>array('id'=>$arr['place_id'])
                 ));
             }
-            return $arr_place;
+            //pr($arr_place[0]['Place']);
+            return $arr_place[0]['Place'];
         }
         /*
          * input lat,lng,distance from client (mobile)

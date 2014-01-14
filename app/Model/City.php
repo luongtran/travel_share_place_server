@@ -47,6 +47,10 @@ class City extends AppModel {
                 'className'=>'Friend',
                 'foreignKey'=>'user_id'
             ),
+            'Status'=>array(
+                'className'=>'Status',
+                'foreignKey'=>'user_id'
+            )
         );
         public function insertCity(){
             $this->save(array(

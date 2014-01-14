@@ -21,7 +21,22 @@ class StatusesController extends AppController {
             $this->response->type('json');
             $this->response->body(json_encode($Statuses));
         }
-/**
+        private function _renderJson($arr){
+            $this->layout=NULL;
+            $this->autoRender=FALSE;
+            $this->response->type('json');
+            $this->response->body(json_encode($arr));
+        }
+        public function getStatus(){
+            $this->_renderJson($this->Status->getStatus($this->request->query));
+            
+        }
+        //personal page status
+        public function getStatusPersonalPage(){
+            $this->_renderJson($this->Status->getStatusPersonalPage($this->request->query));
+        }
+
+        /**
  * Components
  *
  * @var array

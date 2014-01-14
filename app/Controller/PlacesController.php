@@ -24,13 +24,14 @@ class PlacesController extends AppController {
             $this->response->type('json');
             $this->response->body(json_encode($Places));
         }
+        
         public function showImage(){
             $image=  $this->Html->image('no_avarta.png');
             echo $this->Html->image('no_avarta.png', array('alt' => 'CakePHP'));
             $this->layout=NULL;
             $this->autoRender=FALSE;
         }
-
+        
         /** 
  * Components
  *

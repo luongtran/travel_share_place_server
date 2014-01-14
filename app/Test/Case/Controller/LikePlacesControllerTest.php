@@ -1,11 +1,11 @@
 <?php
-App::uses('PlaceFavoritesController', 'Controller');
+App::uses('LikePlacesController', 'Controller');
 
 /**
- * PlaceFavoritesController Test Case
+ * LikePlacesController Test Case
  *
  */
-class PlaceFavoritesControllerTest extends ControllerTestCase {
+class LikePlacesControllerTest extends ControllerTestCase {
 
 /**
  * Fixtures
@@ -13,7 +13,7 @@ class PlaceFavoritesControllerTest extends ControllerTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.place_favorite'
+		'app.like_place'
 	);
 
 /**

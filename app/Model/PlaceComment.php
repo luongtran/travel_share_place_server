@@ -26,9 +26,20 @@ class PlaceComment extends AppModel {
         );
         //get comment of id place
         public function getComments($arr_request){
-            if(isset($arr_request['id_place'])){
+            if(isset($arr_request['id_place'])&&isset($arr_request['limit'])){
+                $arr_comment=  $this->find('all',array(
+                    'conditions'=>array('place_id'=>$arr_request['id_place'])
+                    
+                ));
+               // pr(count($arr_comment));
+               // return count($arr_comment);
+                if(count($arr_comment)<$arr_request['limit']){
+                    return 2;
+                }
                 $arr_comment=  $this->find('all',array(
                     'conditions'=>array('place_id'=>$arr_request['id_place']),
+                    'order'=>array('PlaceComment.id'=>'DESC'),
+                    'limit'=>$arr_request['limit']
                     
                 ));
                 $arr=array();

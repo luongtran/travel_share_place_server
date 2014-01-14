@@ -3,8 +3,9 @@
 	<fieldset>
 		<legend><?php echo __('Add Place Favorite'); ?></legend>
 	<?php
+		echo $this->Form->input('user_id');
 		echo $this->Form->input('place_id');
-		echo $this->Form->input('place_fav_time');
+		echo $this->Form->input('favorite_time');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

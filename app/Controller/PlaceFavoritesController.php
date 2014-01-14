@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+
 /**
  * PlaceFavorites Controller
  *
@@ -14,25 +15,49 @@ class PlaceFavoritesController extends AppController {
  * @var array
  */
 	public $helpers = array('Html');
-        public function json(){
-            $PlaceFavorites=  $this->PlaceFavorite->find('all');
-            $this->layout=NULL;
-            $this->autoRender=FALSE;
-            $this->response->type('json');
-            $this->response->body(json_encode($PlaceFavorites));
-        }
+
 /**
  * Components
  *
  * @var array
  */
 	public $components = array('Paginator');
+        private function _renderJson($arr){
+            $this->layout=NULL;
+            $this->autoRender=FALSE;
+            $this->response->type('json');
+            $this->response->body(json_encode($arr));
+                    
+        }
+        public function storeFavorite(){
+           $this->_renderJson($this->PlaceFavorite->getFavorite($this->request->query));
+           //$this->_renderJson(array());
+        }
+        
+        public function getPlacesFavorite(){
+            $this->_renderJson($this->PlaceFavorite->getPlacesFavorite($this->request->query));
+        }
+        /*
+            check exists favorite of user
+         *          */
+        public function checkExistsFavorite(){
+            $this->layout=NULL;
+            $this->autoRender=False;
+            $favorite=  $this->request->query;
+            $check=  $this->PlaceFavorite->find('all',array(
+                'conditions'=>array('user_id'=>$favorite['user_id'],'place_id'=>$favorite['place_id'])
+            ));
+            if($check!=NULL)
+                return 1;
+            return 0;
+        }
 
-/**
+        /**
  * index method
  *
  * @return void
  */
+        
 	public function index() {
 		$this->PlaceFavorite->recursive = 0;
 		$this->set('placeFavorites', $this->Paginator->paginate());
@@ -101,12 +126,14 @@ class PlaceFavoritesController extends AppController {
  * @param string $id
  * @return void
  */
+        
 	public function delete($id = null) {
 		$this->PlaceFavorite->id = $id;
 		if (!$this->PlaceFavorite->exists()) {
 			throw new NotFoundException(__('Invalid place favorite'));
 		}
 		$this->request->onlyAllow('post', 'delete');
+                
 		if ($this->PlaceFavorite->delete()) {
 			$this->Session->setFlash(__('The place favorite has been deleted.'));
 		} else {

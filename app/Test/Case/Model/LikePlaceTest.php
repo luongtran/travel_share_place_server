@@ -1,11 +1,11 @@
 <?php
-App::uses('PlaceFavorite', 'Model');
+App::uses('LikePlace', 'Model');
 
 /**
- * PlaceFavorite Test Case
+ * LikePlace Test Case
  *
  */
-class PlaceFavoriteTest extends CakeTestCase {
+class LikePlaceTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -13,7 +13,7 @@ class PlaceFavoriteTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.place_favorite'
+		'app.like_place'
 	);
 
 /**
@@ -23,7 +23,7 @@ class PlaceFavoriteTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->PlaceFavorite = ClassRegistry::init('PlaceFavorite');
+		$this->LikePlace = ClassRegistry::init('LikePlace');
 	}
 
 /**
@@ -32,7 +32,7 @@ class PlaceFavoriteTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->PlaceFavorite);
+		unset($this->LikePlace);
 
 		parent::tearDown();
 	}
