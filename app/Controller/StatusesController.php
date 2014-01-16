@@ -35,6 +35,10 @@ class StatusesController extends AppController {
         public function getStatusPersonalPage(){
             $this->_renderJson($this->Status->getStatusPersonalPage($this->request->query));
         }
+        // save status
+        public function addStatus(){
+            $this->_renderJson($this->Status->addStatus($this->request->query));
+        }
 
         /**
  * Components

@@ -47,11 +47,18 @@ class Status extends AppModel {
         //activity personal page
         public function getStatusPersonalPage($request){
             $status_all=array();
-             if(isset($request['user_id'])){
-                if($request['user_id']){
+             if(isset($request['user_id'])&&isset($request['limit'])){
+                if($request['user_id']&&$request['limit']!=NULL){
+                    $status=  $this->find('all',array(
+                       'conditions'=>array('user_id'=>$request['user_id']) 
+                    ));
+                    if(count($status)<$request['limit']){
+                        return 2;
+                    }
                      $status=  $this->find('all',array(
                         'conditions'=> array('user_id'=>$request['user_id']),
-                         'order'=>array('status_time'=>'DESC')
+                         'order'=>array('status_time'=>'DESC'),
+                         'limit'=>$request['limit']
                      ));
                      $model_user=classRegistry::init('User');
                      $user=$model_user->find('all',array(
@@ -76,5 +83,16 @@ class Status extends AppModel {
              
              }
              return 0;
+        }
+        public function addStatus($request){
+            if(isset($request['user_id'])&&isset($request['content'])){
+                if($request['user_id']!=NULL&&$request['content']!=NULL){
+                    if($this->save($request))
+                        return 1;
+                    else
+                        return 0;
+                }
+            }
+            return 0;
         }
 }
