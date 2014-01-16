@@ -65,6 +65,7 @@ class Status extends AppModel {
                         $status_all[$i]['status_time']=$status[$i]['Status']['status_time'];
                         $status_all[$i]['user_name']=$user[0]['User']['user_name'];
                         $status_all[$i]['avarta']=$user[0]['User']['avarta'];
+                        $status_all[$i]['image_cover']=$user[0]['User']['image_cover'];
                      }
                      if($status!=NULL){
                          return $status_all;

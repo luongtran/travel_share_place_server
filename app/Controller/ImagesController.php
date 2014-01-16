@@ -21,6 +21,7 @@ class ImagesController extends AppController {
  *
  * @var array
  */
+        public $uses=array('Image','User');
 	public $components = array('Paginator');
 
 /**
@@ -60,22 +61,68 @@ class ImagesController extends AppController {
             //pr($path);die();
             return move_uploaded_file($image['tmp_name'], $path . DS . $image['name']);
         }
+        public function delete_file(){
+            $this->layout=NULL;
+            $this->autoRender=FALSE;
+            $path='img/avarta_user/1/1.jpg';
+            $file=new File($path,true, 0644);
+            
+            if($file->exists()){
+                $file->delete();
+                return 1;
+            }
+            return 0;
+        }
+        
         public function upload() {
             $this->layout=NULL;
             $this->autoRender=FALSE;
-            //$file_path = "img/properties/uploads/";
-            
             $folder = new Folder();
             $file_path =WWW_ROOT . 'img/properties' . DS .'test_uploads';
             $folder->create($file_path);
             //echo $file_path;
             $file_path=$file_path.'/';
             $file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
+            
             if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
                 echo "success";
             } else{
                 echo "fail";
             }
+        }
+        //upload avarta
+         public function upload_avarta() {
+                    $this->layout=NULL;
+                    $this->autoRender=FALSE;
+                    $folder = new Folder();
+                    $file_name=basename( $_FILES['uploaded_file']['name']);
+                    $file_name=str_replace('.jpg','', $file_name);
+                    $file_name=str_replace('.png','', $file_name);
+                    $id_user=$file_name;
+                    $path_save='/img/avarta_user/'.$file_name.'/'.basename( $_FILES['uploaded_file']['name']);
+                    $file=new File($path_save,true, 0644);
+                    if($file->exists()){
+                        $file->delete();
+                    }
+                    $file_path =WWW_ROOT . 'img/avarta_user/'.$file_name;
+                    $folder->create($file_path);
+                    //echo $file_path;
+                    $file_path=$file_path.'/';
+                    $file_path = $file_path . basename( $_FILES['uploaded_file']['name']);
+                    
+                    if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
+                        //$model_user=classRegistry::init('User');
+                        //$model_user->id=$id_user;
+                        //$model_user->set('avarta',$file_path);
+                        $this->User->id=$id_user;
+                        $this->User->saveField('avarta',$path_save);
+                        echo "success";
+                    } else{
+                        echo "fail";
+                    }
+                    
+                    
+         
         }
 /**
  * view method
