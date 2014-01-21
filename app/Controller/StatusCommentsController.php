@@ -25,11 +25,6 @@ class StatusCommentsController extends AppController {
             $this->layout=NULL;
             $this->autoRender=FALSE;
             $this->response->type('json');
-//            $ar=array();
-//            for($i=0;$i<count($arr);$i++){
-//                array_push($ar,$arr[$i]['City']);
-//            }
-            //pr($ar);
             $this->response->body(json_encode($arr));
          }
          public function getAllComment(){
@@ -39,7 +34,16 @@ class StatusCommentsController extends AppController {
             
             $this->_renderJson($comment);
         }
-/**
+        //add comment
+        public function addCommentStatus(){
+            $this->_renderJson($this->StatusComment->addComment($this->request->query));
+        }
+        
+        public function getCommentById(){
+            $this->_renderJson($this->StatusComment->getCommentById($this->request->query));
+        }
+
+        /**
  * index method
  *
  * @return void

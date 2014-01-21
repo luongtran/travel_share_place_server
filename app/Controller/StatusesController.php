@@ -27,9 +27,9 @@ class StatusesController extends AppController {
             $this->response->type('json');
             $this->response->body(json_encode($arr));
         }
+        
         public function getStatus(){
             $this->_renderJson($this->Status->getStatus($this->request->query));
-            
         }
         //personal page status
         public function getStatusPersonalPage(){
@@ -38,6 +38,9 @@ class StatusesController extends AppController {
         // save status
         public function addStatus(){
             $this->_renderJson($this->Status->addStatus($this->request->query));
+        }
+        public function deleteStatus(){
+            $this->_renderJson($this->Status->deleteStatus($this->request->query));
         }
 
         /**

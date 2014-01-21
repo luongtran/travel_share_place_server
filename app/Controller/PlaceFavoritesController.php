@@ -37,9 +37,11 @@ class PlaceFavoritesController extends AppController {
         public function getPlacesFavorite(){
             $this->_renderJson($this->PlaceFavorite->getPlacesFavorite($this->request->query));
         }
+        
         /*
             check exists favorite of user
          *          */
+        
         public function checkExistsFavorite(){
             $this->layout=NULL;
             $this->autoRender=False;
@@ -50,6 +52,10 @@ class PlaceFavoritesController extends AppController {
             if($check!=NULL)
                 return 1;
             return 0;
+        }
+        //function use for test of algorithms matching
+        public function getPlaceFavoriteOfFriend(){
+            $this->_renderJson($this->PlaceFavorite->a_checkPlaceFriendFavorite(1,2));
         }
 
         /**

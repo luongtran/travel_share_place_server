@@ -32,6 +32,13 @@ class FriendsController extends AppController {
             $this->_renderJson($this->Friend->getListFriend($this->request->query));
             
         }
+        public function getCheckFriendById(){
+            $this->_renderJson($this->Friend->getCheckFriend($this->request->query));
+            
+        }
+        public function addFriend(){
+            $this->_renderJson($this->Friend->addFriend($this->request->query));
+        }
 
         /**
  * Components

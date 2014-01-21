@@ -28,8 +28,11 @@ class UsersController extends AppController {
             $this->response->type('json');
             $this->response->body(json_encode($arr));
          }
-         
-        public function getEmailByIdUser(){
+         public function getIdDistrict(){
+             $this->_renderJson($this->User->getIdDistrictByIdUser(9));
+         }
+
+         public function getEmailByIdUser(){
             $this->layout=NULL;
             $this->autoRender=FALSE;
             return $this->User->getEmail($this->request->query);

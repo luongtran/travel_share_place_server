@@ -43,6 +43,7 @@ class PlaceFavorite extends AppModel {
          *         return 1-> store favorite
          *         return 2 -> delete favorite
          *          */
+        
         public function getFavorite($request){
             if(isset($request['user_id'])&& isset($request['place_id'])){
                 if($request['user_id']!=NULL&&$request['place_id']!=NULL){
@@ -66,6 +67,7 @@ class PlaceFavorite extends AppModel {
             }
             return 0;
         }
+        
         //get places favorite of user
         /*
 
@@ -104,6 +106,47 @@ class PlaceFavorite extends AppModel {
                 array_push($places_return,$places[0]['Place']);
             }
             return $places_return;
+        }
+        //algorithms check tplace_id of place_id same tplace_id of place favorite of user_id
+        public function a_checkSameTypePlaceFavorite($user_id,$place_id){
+            $favorite= $this->getPlacesFavorite(array('user_id'=>$user_id));
+            if(count($favorite)!=0){
+                $model_place=classRegistry::init('Place');
+                $place=$model_place->find('all',array(
+                     'conditions'=>array('Place.id'=>$place_id)
+                 ));
+                if(count($place)!=0){
+                    for($i=0;$i<count($favorite);$i++){
+                        if($favorite[$i]['tplace_id']==$place[0]['Place']['tplace_id']){
+                            return 1;
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+        //check place_id in place favorite of friend ?
+        //use algorithms matching "a_"
+        public function a_checkPlaceFriendFavorite($user_id,$place_id){
+            $model_friend=classRegistry::init('Friend');
+            //$friends=  $this->find('all');
+            $friends=$model_friend->getListFriend(array('user_id'=>$user_id));
+            $favorites=  $this->find('all',array(
+               'conditions'=>array('place_id'=>$place_id)
+            ));
+            //return $friends;
+            if(count($favorites)==0){
+                return 0;
+            }else{
+                for($i=0;$i<count($favorites);$i++){
+                    for($j=0;$j<count($friends);$j++){
+                        if($favorites[$i]['PlaceFavorite']['user_id']==$friends[$j]['id']){
+                            return 1;
+                        }
+                    }
+                }
+            }
+            return 0;
         }
                 
 }

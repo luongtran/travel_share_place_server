@@ -9,7 +9,7 @@ App::uses('GeocodeLib', 'Tools.Lib');
  */
 
 class PlacesController extends AppController {
-
+    
 /**
  * Helpers
  *
@@ -58,12 +58,13 @@ class PlacesController extends AppController {
             $ar=$this->Place->getPlaceFromID($this->request->query);
             $this->_renderJson($ar);
         }
+        
           /*
          * input lat,lng,distance from client (mobile)
          * output list places with distance greater than or equal
          *          
           */
-      
+        
         //function get place in distance
         public function getPlaceByDistance(){
             $arr=array(0);
@@ -71,10 +72,14 @@ class PlacesController extends AppController {
             $this->autoRender=FALSE;
             $arr=$this->request->query;
             $arr=$this->Place->getPlaceByDistance($this->request->query);
-            
             $this->_renderJson($arr);
-        } 
-
+        }
+        
+        //this function use for test the functions algorithms matching
+        public function getPlaceNewFeed(){
+            $this->_renderJson($this->Place->a_checkPlaceSameTypePlaceHighView(1,2));
+        }
+        
         /**
  * index method
  *

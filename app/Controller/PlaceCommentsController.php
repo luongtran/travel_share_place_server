@@ -47,18 +47,16 @@ class PlaceCommentsController extends AppController {
         }
         
         public function saveComment(){
-            $this->layout=NULL;
-            $this->autoRender=FALSE;
-            if($this->request->is('get'))
-                $arr_get=  $this->request->query;
-                if(isset ($arr_get['place_id'])&&isset($arr_get['user_id'])&&isset($arr_get['message'])){
-                    if($this->PlaceComment->save($this->request->query)){
-                        return 1;
-                    }
-                }
-            return 0;
+            $this->_renderJson($this->PlaceComment->saveComment($this->request->query));
+            
         }
-/**
+        //function use test algorithms matching
+        public function a_CheckPlaceManyComment(){
+            $this->_renderJson($this->PlaceComment->a_CheckPlaceManyComment(3));
+        }
+
+
+        /**
  * index method
  *
  * @return void

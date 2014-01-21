@@ -133,4 +133,15 @@ class User extends AppModel {
             }
             return 0;
         }
+        //use matching
+        public function getIdDistrictByIdUser($user_id){
+            $user=  $this->find('all',array(
+                'conditions'=>array('User.id'=>$user_id),
+                'recursive'=>-1
+            ));
+            if(count($user)!=0)
+                return $user[0]['User']['district_id'];
+            return 0;
+              
+        }
 }

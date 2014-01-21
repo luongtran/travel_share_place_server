@@ -32,12 +32,9 @@ class ActivitiesController extends AppController {
 //            //pr($ar);
             $this->response->body(json_encode($arr));
          }
+         
          public function getAllActivity(){
-            $Activity=  $this->Activity->find('all',array(
-                'recursive'=>-1
-            ));
-            
-            $this->_renderJson($Activity);
+            $this->_renderJson($this->Activity->getAllActivity($this->request->query));
         }
 /**
  * index method
