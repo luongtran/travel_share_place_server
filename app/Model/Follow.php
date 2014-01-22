@@ -27,4 +27,12 @@ class Follow extends AppModel {
                 'foreignKey'=>'place_id'
             )
         );
+        //
+        public function getFollowByUserId($user_id){
+            $follow=  $this->find('all',array(
+               'conditions'=>array('user_id'=>$user_id)
+                
+            ));
+            return $follow;
+        }
 }

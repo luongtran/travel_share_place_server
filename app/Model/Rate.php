@@ -74,7 +74,7 @@ class Rate extends AppModel {
              $average=$sum/count($arr_rate);
              $this->update_rate_place($place_id,$average);
         }
-
+        
         private function update_rate_place($place_id,$average){
             $model_place=ClassRegistry::init('Place');
             $place=  $model_place->find('all',array(
@@ -89,5 +89,21 @@ class Rate extends AppModel {
                 $model_place->save();
                // }
             }
+        }
+        
+        //functions for algorithms matching
+        //rate high of user
+        public function a1_getTopHighRateOfUser($user_id,$rate){
+            $place_rate=array();
+            $top_rate=  $this->find('all',array(
+                'conditions'=>array('user_id'=>$user_id,'num_rate >='=>2.5)
+            ));
+            if(count($top_rate)>0){
+                for($i=0;$i<count($top_rate);$i++){
+                    $place_rate[$i]['place_id']=$top_rate[$i]['Rate']['place_id'];
+                    $place_rate[$i]['rate']=$rate;
+                }
+            }
+            return $place_rate;
         }
 }

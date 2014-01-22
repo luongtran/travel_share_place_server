@@ -43,7 +43,6 @@ class PlaceCommentsController extends AppController {
         public function getCommentByIdPlace(){
             if($this->request->is('get'))
                 return $this->_renderJson($this->PlaceComment->getComments($this->request->query));
-
         }
         
         public function saveComment(){
@@ -52,9 +51,9 @@ class PlaceCommentsController extends AppController {
         }
         //function use test algorithms matching
         public function a_CheckPlaceManyComment(){
-            $this->_renderJson($this->PlaceComment->a_CheckPlaceManyComment(3));
+            $this->_renderJson($this->PlaceComment->a1_getPlaceHighCommentOfUser(1,5));
         }
-
+        
 
         /**
  * index method

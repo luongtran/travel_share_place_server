@@ -55,7 +55,9 @@ class PlaceFavoritesController extends AppController {
         }
         //function use for test of algorithms matching
         public function getPlaceFavoriteOfFriend(){
-            $this->_renderJson($this->PlaceFavorite->a_checkPlaceFriendFavorite(1,2));
+            //top
+            $this->_renderJson($this->PlaceFavorite->a1_placeFavoriteOfUser(1,array(),3));
+            
         }
 
         /**

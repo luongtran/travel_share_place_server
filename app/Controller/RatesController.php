@@ -27,10 +27,15 @@ class RatesController extends AppController {
             $this->response->type('json');
             $this->response->body(json_encode($arr));
         }
+        
         public function rating(){
           
             $this->_renderJson($this->Rate->rating($this->request->query));
           
+        }
+        public function getTopHighRateOfUser(){
+            $this->_renderJson($this->Rate->a1_getTopHighRateOfUser(1,3));
+                    
         }
 
         /**

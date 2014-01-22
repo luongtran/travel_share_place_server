@@ -77,4 +77,22 @@ class LikePlace extends AppModel {
             }
         }
         
+        //change top 2
+        //get places like lately of user(order current time like)
+        public function a1_getPlaceLikeOfUser($user_id,$rate,$top){
+            $places_ulike=array();
+            $place_like=  $this->find('all',array(
+               'conditions'=>array('user_id'=>$user_id),
+                'order'=>array('like_time'=>'DESC'),
+                'limit'=>$top
+            ));
+            if(count($place_like)>0){
+                for($i=0;$i<count($place_like);$i++){
+                    $places_ulike[$i]['place_id']=$place_like[$i]['LikePlace']['place_id'];
+                    $places_ulike[$i]['rate']=$rate;
+                }
+            }
+            return $places_ulike;
+        }
+        
 }

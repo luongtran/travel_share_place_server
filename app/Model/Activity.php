@@ -39,22 +39,25 @@ class Activity extends AppModel {
         
         public function getAllActivity($request){
             
+            
             if(isset($request['user_id'])){
                 $user_id=$request['user_id'];
                 if($request['user_id']!=NULL){
+                    
+                    $model_follow=classRegistry::init('Follow');
+                    $list_follow= $model_follow->getFollowByUserId($user_id);
+                    
                     $model_friend=classRegistry::init('Friend');
                     $list_friend= $model_friend->getListFriend($request);
+                    //return $list_friend;
                     $list_activity=  $this->find('all',array(
                        'order'=>array('activity_time'=>'DESC')
+                        
                     ));
                     //return $list_activity;
                     $count=0;
                     $arr_activity=array();
-                    //$model_event=classRegistry::init('EventActivity');
-                    //$model_category=classRegistry::init('CategotyActivity');
-                  // pr($this->find('all'));
-                   // return $this->find('all');
-                    //return $model_event->getNameEventById(6);
+                    
                     for($i=0;$i<count($list_activity);$i++){
                         for($j=0;$j<count($list_friend);$j++){
                             if($list_activity[$i]['Activity']['user_id']==$list_friend[$j]['id']){
@@ -73,7 +76,25 @@ class Activity extends AppModel {
                                 $count++;
                             }
                         }
+                        for($k=0;$k<count($list_follow);$k++){
+                            if($list_activity[$i]['Activity']['category_id']==1){
+                                if($list_activity[$i]['Activity']['activity_id']==$list_follow[$k]['Follow']['place_id']){
+                                    $arr_activity[$count]['id']=$list_activity[$i]['Activity']['id'];
+                                    $arr_activity[$count]['user_id']=$list_activity[$i]['Activity']['user_id'];
+                                    $arr_activity[$count]['category_id']=$list_activity[$i]['Activity']['category_id'];
+                                    $arr_activity[$count]['cate_name']=$list_activity[$i]['category']['cate_name'];
+                                    $arr_activity[$count]['event_id']=$list_activity[$i]['Activity']['event_id'];
+                                    $arr_activity[$count]['event_name']=$list_activity[$i]['event']['event_name'];
+                                    $arr_activity[$count]['activity_id']=$list_activity[$i]['Activity']['activity_id'];
+                                    $arr_activity[$count]['activity_time']=$list_activity[$i]['Activity']['activity_time'];
+                                    $arr_activity[$count]['content']=$list_activity[$i]['Activity']['content'];
+                                    
+                                    $count++;
+                                }
+                            }
+                        }
                     }
+                    
                     return $arr_activity;
                     
                 }

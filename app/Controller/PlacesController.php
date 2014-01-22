@@ -77,7 +77,8 @@ class PlacesController extends AppController {
         
         //this function use for test the functions algorithms matching
         public function getPlaceNewFeed(){
-            $this->_renderJson($this->Place->a_checkPlaceSameTypePlaceHighView(1,2));
+            $places=  $this->Place->getPlaces();
+            $this->_renderJson($this->Place->a1_allPlaceHighView(5));
         }
         
         /**

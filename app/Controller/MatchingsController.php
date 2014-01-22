@@ -23,9 +23,10 @@ class MatchingsController extends AppController{
         public function test(){
             return $this->_renderJson(array('1'));
         }
+        
         public function algorithmsMatching(){
             //$this->_renderJson($this->Matching->Matching($this->request->query));
-            $this->_renderJson($this->Matching->Matching($this->request->query));
+            $this->_renderJson($this->Matching->getPlaceAfterMatching($this->request->query,1));
         }
    
 

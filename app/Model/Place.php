@@ -101,13 +101,90 @@ class Place extends AppModel {
                     if($re_distance<=$get_distance){ // distance = 80
                         array_push($arr_place_bydistance,$arr_all_place[$i]['Place']);
                     }
-                    
                 }
             }
             //pr($arr_place_bydistance);
             return $arr_place_bydistance;
         }
         
+        //get all place same district vs user_id
+        public function a1_allPlaceByDistrict($district_id,$places,$rate){
+            $places_district=array();
+            $count=0;
+            for($i=0;$i<count($places);$i++){
+               if($places[$i]['district_id']==$district_id){
+                   $places_district[$count]['place_id']=$places[$i]['id'];
+                   $places_district[$count]['rate']=$rate;
+                   $count++;
+               }
+           }
+           return $places_district;
+        }
+        //get all place promotion =1
+         public function a1_allPlaceByPromotion($places,$rate){
+           $places_promotion=array();
+           $count=0;
+            for($i=0;$i<count($places);$i++){
+               if($places[$i]['promotion']==1){
+                   $places_promotion[$count]['place_id']=$places[$i]['id'];
+                   $places_promotion[$count]['rate']=$rate;
+                   $count++;
+               }
+           }
+           return $places_promotion;
+        }
+        //top 2
+        public function a1_allPlaceHighRates($rate,$top){
+            $places_rate=array();
+            $places=  $this->find('all',array(
+               'order'=>array('rate'=>'DESC') ,
+                'limit'=>$top,
+                'recursive'=>-1
+            ));
+            if(count($places)>0){
+                for($i=0;$i<count($places);$i++){
+                    $places_rate[$i]['place_id']=$places[$i]['Place']['id'];
+                    $places_rate[$i]['rate']=$rate;
+                }
+            }
+            return $places_rate;
+        }
+        
+        //top 2 high like 
+        public function a1_allPlaceHighLike($rate,$top){
+            $places_like=array();
+            $places=  $this->find('all',array(
+               'order'=>array('p_like'=>'DESC'),
+                'limit'=>$top,
+                'recursive'=>-1
+            ));
+            if(count($places)>0){
+                for($i=0;$i<count($places);$i++){
+                    $places_like[$i]['place_id']=$places[$i]['Place']['id'];
+                    $places_like[$i]['rate']=$rate;
+                }
+            }
+            return $places_like;
+        }
+        
+        //top 2
+        //many people view
+        public function a1_allPlaceHighView($rate,$top){
+            $places_view=array();
+            $places=  $this->find('all',array(
+               'order'=>array('p_view'=>'DESC'),
+                'limit'=>$top,
+                'recursive'=>-1
+            ));
+            if(count($places)>0){
+                for($i=0;$i<count($places);$i++){
+                    $places_view[$i]['place_id']=$places[$i]['Place']['id'];
+                    $places_view[$i]['rate']=$rate;
+                }
+            }
+            return $places_view;
+        }
+       
         //check place_id same district_id
         // use in algorithms matching
         public function a_checkPlaceByDistrict($distric_id,$place_id,$places){
@@ -159,6 +236,7 @@ class Place extends AppModel {
             }
             return 0;
         }
+        
         // not use in algorithms
         public function a_getAllPlaceSameType($type){
             $place=  $this->find('all',array(

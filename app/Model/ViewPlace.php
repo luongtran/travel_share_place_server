@@ -4,6 +4,7 @@ App::uses('AppModel', 'Model');
  * ViewPlace Model
  *
  */
+
 class ViewPlace extends AppModel {
 
 /**
@@ -103,4 +104,21 @@ class ViewPlace extends AppModel {
             return $view_place;
         }
         
+        // change top 2
+         // top user view places
+        public function a1_allTopPlaceUserView($user_id,$rate,$top){
+            $place_view=array();
+            $top_places=  $this->find('all',array(
+                'conditioms'=>array('user_id',$user_id),
+                'order'=>array('view_count'=>'DESC'),
+                'limit'=>$top
+            ));
+            if(count($top_places)>0){
+                for($i=0;$i<count($top_places);$i++){
+                    $place_view[$i]['place_id']=$top_places[$i]['ViewPlace']['place_id'];
+                    $place_view[$i]['rate']=$rate;
+                }
+            }
+            return $place_view;
+        }
 }

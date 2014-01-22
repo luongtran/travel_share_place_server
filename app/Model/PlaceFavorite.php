@@ -75,6 +75,7 @@ class PlaceFavorite extends AppModel {
          * output: return places favorite
          *          return 1 ->user is not favorite  
          *          return 2 ->not get from client       */
+        
         public function getPlacesFavorite($request){
             $id_places=array();
             if(isset($request['user_id'])){
@@ -148,5 +149,160 @@ class PlaceFavorite extends AppModel {
             }
             return 0;
         }
-                
+        /**************************************************
+         * function for algorithms matching
+        ****************************************************        */
+        //1 exist
+        //0 not exist 
+        private function _checkExistId($places_id,$id){
+            if(count($places_id)>0){
+                for($k=0;$k<count($places_id);$k++){
+                    if($places_id[$k]['tplace_id']==$id){
+                        return 1;
+                    }
+                }
+            }
+            return 0;
+        }
+        /*
+         * get all place same type vs favorite of user         */
+        public function _getAllTPlaceSameTypeFavoriteUser($user_id,$places){
+            $tplace_id=array();
+            $count=0;
+            $favorites= $this->getPlacesFavorite(array('user_id'=>$user_id));
+            //return $favorites;
+            if(count($favorites)>0){
+               for($i=0;$i<count($favorites);$i++){
+                   for($j=0;$j<count($places);$j++){
+                       if($places[$j]['tplace_id']==$favorites[$i]['tplace_id']){
+                           if($this->_checkExistId($tplace_id,$favorites[$i]['tplace_id'])==0){                    
+                               $tplace_id[$count]['tplace_id']=$favorites[$i]['tplace_id'];
+                               $count++;
+                           }
+                       }
+                   }
+               }
+            }
+            return $tplace_id;
+        }
+        
+        //top 2
+        private function _checkExistTopViewPlace($tplace_id,$place_id){
+            $model_place=classRegistry::init('Place');
+            $places=  $model_place->find('all',array(
+                'conditions'=>array('tplace_id'=>$tplace_id),
+                'order'=>array('p_view'=>'DESC'),
+                'limit'=>2
+            ));
+            //return $places;
+            for($i=0;$i<count($places);$i++){
+                if($places[$i]['Place']['id']==$place_id){
+                    return 1;
+                }
+            }
+            return 0;
+        }
+        
+        //return favorite places of user 
+        public function a1_placeFavoriteOfUser($user_id,$places,$rate){
+            $places_favorite=array();
+            $count=0;
+            $model_place=classRegistry::init('Place');
+            //$places=$model_place->getPlaces();
+            $favorites=$this->getPlacesFavorite(array('user_id'=>$user_id));
+            for($i=0;$i<count($places);$i++){
+                for($j=0;$j<count($favorites);$j++){
+                    if($places[$i]['id']==$favorites[$j]['id']){
+                        $places_favorite[$count]['place_id']=$places[$i]['id'];
+                        $places_favorite[$count]['rate']=$rate;
+                        $count++;
+                    }
+                }
+            }
+            return $places_favorite;
+        }
+
+        public function a1_PlaceViewHighSameTypeFavorite($user_id,$places,$rate,$top){
+            $model_place=classRegistry::init('Place');
+            $places_view=array();
+            $count=0;
+            //$places=$model_place->getPlaces();
+            $tplaces= $this->_getAllTPlaceSameTypeFavoriteUser($user_id,$places);
+//            return $tplaces;
+            if(count($tplaces)>0){
+                for($i=0;$i<count($tplaces);$i++){
+                    $places_top=  $model_place->find('all',array(
+                        'conditions'=>array('tplace_id'=>$tplaces[$i]['tplace_id']),
+                        'order'=>array('p_view'=>'DESC'),
+                        'limit'=>$top, //change top
+                        'recursive'=>-1
+                    ));
+                    if(count($places_top)>0){
+                        for($j=0;$j<count($places_top);$j++){
+                            $places_view[$count]['place_id']=$places_top[$j]['Place']['id'];
+                            $places_view[$count]['rate']=$rate;
+                            $count++;
+                        }
+                    }
+                }
+            }
+           // pr($places_view);
+            return $places_view;
+            //return $this->_checkExistTopViewPlace(2,4);
+        }
+        //like
+        public function a1_PlaceLikeHighSameTypeFavorite($user_id,$places,$rate,$top){
+            $model_place=classRegistry::init('Place');
+            $places_like=array();
+            $count=0;
+            //$places=$model_place->getPlaces();
+            $tplaces= $this->_getAllTPlaceSameTypeFavoriteUser($user_id,$places);
+//            return $tplaces;
+            if(count($tplaces)>0){
+                for($i=0;$i<count($tplaces);$i++){
+                    $places_top=  $model_place->find('all',array(
+                        'conditions'=>array('tplace_id'=>$tplaces[$i]['tplace_id']),
+                        'order'=>array('p_like'=>'DESC'),
+                        'limit'=>$top, //change top
+                        'recursive'=>-1
+                    ));
+                    if(count($places_top)>0){
+                        for($j=0;$j<count($places_top);$j++){
+                            $places_like[$count]['place_id']=$places_top[$j]['Place']['id'];
+                            $places_like[$count]['rate']=$rate;
+                            $count++;
+                        }
+                    }
+                }
+            }
+            return $places_like;
+        }
+        
+        //rate
+         public function a1_PlaceRateHighSameTypeFavorite($user_id,$places,$rate,$top){
+            $model_place=classRegistry::init('Place');
+            $places_rate=array();
+            $count=0;
+            //$places=$model_place->getPlaces();
+            $tplaces= $this->_getAllTPlaceSameTypeFavoriteUser($user_id,$places);
+            if(count($tplaces)>0){
+                for($i=0;$i<count($tplaces);$i++){
+                    $places_top=  $model_place->find('all',array(
+                        'conditions'=>array('tplace_id'=>$tplaces[$i]['tplace_id'],'rate >='=>2.5),
+                        'order'=>array('rate'=>'DESC'),
+                        'limit'=>$top, //change top
+                        'recursive'=>-1
+                    ));
+                    if(count($places_top)>0){
+                        for($j=0;$j<count($places_top);$j++){
+                            $places_rate[$count]['place_id']=$places_top[$j]['Place']['id'];
+                            $places_rate[$count]['rate']=$rate;
+                            $count++;
+                        }
+                    }
+                }
+            }
+            return $places_rate;
+        }
+        
 }

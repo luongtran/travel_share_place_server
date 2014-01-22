@@ -120,5 +120,24 @@ class PlaceComment extends AppModel {
             }
             return 0;
         }
+        //top 2
+        //get place num comment high of user
+        public function a1_getPlaceHighCommentOfUser($user_id,$rate,$top){
+            $place_comment=array();
+            $top_place=  $this->find('all',array(
+                'conditions'=>array('user_id'=>$user_id),
+                'group'=>array('place_id'),
+                'order'=>array('count(place_id) DESC'),
+                'recursive'=>-1,
+                'limit'=>$top
+            ));
+            if(count($top_place)>0){
+                for($i=0;$i<count($top_place);$i++){
+                    $place_comment[$i]['place_id']=$top_place[$i]['PlaceComment']['place_id'];
+                    $place_comment[$i]['rate']=$rate;
+                }
+            }
+            return $place_comment;
+        }
         
 }

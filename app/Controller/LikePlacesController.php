@@ -21,8 +21,19 @@ class LikePlacesController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
+         private function _renderJson($arr){
+            $this->layout=NULL;
+            $this->autoRender=FALSE;
+            $this->response->type('json');
+            $this->response->body(json_encode($arr));
+        }
         
-/**
+        //function for check function of algorithms matching
+        public function getPlaceLike(){
+            $this->_renderJson($this->LikePlace->a1_getPlaceLikeOfUser(1,5));
+        }
+
+        /**
  * index method
  *
  * @return void
@@ -31,13 +42,7 @@ class LikePlacesController extends AppController {
 		$this->LikePlace->recursive = 0;
 		$this->set('likePlaces', $this->Paginator->paginate());
 	}
-        private function _renderJson($arr){
-            $this->layout=NULL;
-            $this->autoRender=FALSE;
-            $this->response->type('json');
-            $this->response->body(json_encode($arr));
-                    
-        }
+       
         /*
             input: request get container user_id and place_id
          *  output: 0 -> not store

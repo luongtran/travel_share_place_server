@@ -32,9 +32,9 @@ class ViewPlacesController extends AppController {
         }
          //function use test algorithms matching
         public function getViewPlace(){
-            $this->_renderJson($this->ViewPlace->a_checkHighViewPlaceOfUser(1,3));
+            $this->_renderJson($this->ViewPlace->a1_allTopPlaceUserView(1,5,2));
         }
-
+        
         /**
  * index method
  *
